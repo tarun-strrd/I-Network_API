@@ -17,9 +17,11 @@ mongoose.connect(process.env.MONGO_URI);
 mongoose.connection.on("connected", () => {
   console.log(`Connected to the DATABASE`);
 });
-mongoose.connection.on("error", (err) => {
-  //console.log(keys);
-  console.log("error", err);
+mongoose.connection.on("connected", () => {
+  app.listen(PORT, () => {
+    console.log(`Server is running on ${PORT}`);
+  });
+  console.log(`Connected to the DATABASE`);
 });
 app.use(
   cors({
@@ -35,7 +37,4 @@ app.use("/tweet", tweetRouter);
 app.use("/user", UserRouter);
 app.get("/", (req, res) => {
   res.json("hello");
-});
-app.listen(PORT, () => {
-  console.log(`Server is running on ${PORT}`);
 });

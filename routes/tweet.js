@@ -12,6 +12,7 @@ router.get("/allTweets", checkLogin, (req, res) => {
     .populate("postedBy", "_id name profilePic")
     .sort("-createdAt")
     .then((tweets) => {
+      //console.log(tweets);
       res.status(200).json({ tweets });
     })
     .catch((err) => {

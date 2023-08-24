@@ -10,7 +10,7 @@ const checkLogin = (req, res, next) => {
     return res.status(401).json({ error: "You must be logged in!" });
   }
   const token = authorization.replace("Bearer ", "");
-
+  //console.log(token);
   try {
     const decodedDetails = jwt.verify(token, process.env.JWT_SECRET);
     //console.log(decodedDetails);

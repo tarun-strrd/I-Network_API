@@ -6,6 +6,19 @@ const Tweet = mongoose.model("Tweet");
 const Comment = mongoose.model("Comment");
 const User = mongoose.model("User");
 
+router.get("/suggestedNetworks", checkLogin, (req, res) => {
+  console.log("suggestedNetworks");
+  User.find()
+    .sort("-createdAt")
+    .select("name profilePic")
+    .limit(10)
+    .then((users) => {
+      console.log(users);
+      res.status(200).json({ users });
+    })
+    .catch((err) => console.log(err));
+});
+
 router.get("/:userId", checkLogin, (req, res, next) => {
   //console.log(req.params);
   User.findOne({ _id: req.params.userId })
@@ -50,18 +63,6 @@ router.put("/follow", checkLogin, (req, res) => {
         .catch((err) => {
           console.log(err);
         });
-    })
-    .catch((err) => console.log(err));
-});
-
-router.get("/suggestedNetworks", checkLogin, (req, res) => {
-  console.log("suggestedNetworks");
-  User.find()
-    .sort("-createdAt")
-    .limit(10)
-    .then((users) => {
-      console.log(users);
-      res.status(200).json({ users });
     })
     .catch((err) => console.log(err));
 });

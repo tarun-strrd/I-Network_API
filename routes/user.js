@@ -28,9 +28,10 @@ router.get("/:userId", checkLogin, (req, res, next) => {
         return res.status(404).json({ error: "User not found" });
       }
       Tweet.find({ postedBy: req.params.userId })
-        .populate("postedBy", "_id name")
-        .then((posts) => {
-          return res.status(200).json({ user, posts });
+        .sort("-createdAt")
+        .populate("postedBy", "_id name profilePic")
+        .then((tweets) => {
+          return res.status(200).json({ user, tweets });
         })
         .catch((err) => console.log(err));
     })
@@ -95,8 +96,8 @@ router.put("/unfollow", checkLogin, (req, res) => {
 });
 
 router.put("/updateProfilePic", checkLogin, (req, res) => {
-  console.log("updatePic");
-  console.log(req.body);
+  // console.log("updatePic");
+  // console.log(req.body);
   User.findByIdAndUpdate(
     req.user._id,
     { $set: { profilePic: req.body.url } },

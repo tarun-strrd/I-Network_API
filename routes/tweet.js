@@ -61,11 +61,22 @@ router.post("/createTweet", checkLogin, (req, res) => {
     });
 });
 
-router.get("/myposts", checkLogin, (req, res) => {
-  Post.find({ postedBy: req.user._id })
-    .populate("postedBy", "_id name")
-    .then((myPosts) => {
-      res.json({ myPosts });
+router.get("/likedTweets", checkLogin, (req, res) => {
+  Tweet.find({ likes: req.user._id })
+    .populate("postedBy", "_id name profilePic")
+    .then((tweets) => {
+      res.status(200).json({ tweets });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+
+router.get("/myTweets", checkLogin, (req, res) => {
+  Tweet.find({ postedBy: req.user._id })
+    .populate("postedBy", "_id name profilePic")
+    .then((myTweets) => {
+      res.json({ myTweets });
     })
     .catch((err) => {
       console.log(err);

@@ -46,6 +46,53 @@ router.post("/signup", (req, res) => {
     });
 });
 
+router.post("/signin", (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return res.status(422).json({ error: "Provide all required feilds" });
+  }
+  User.findOne({ email }).then((savedUser) => {
+    if (!savedUser) {
+      return res.json({ error: "Invalid email or Password" });
+    }
+    bcrypt
+      .compare(password, savedUser.password)
+      .then((isMatch) => {
+        if (isMatch) {
+          const token = jwt.sign({ id: savedUser._id }, process.env.JWT_SECRET);
+          const {
+            name,
+            _id,
+            email,
+            followers,
+            following,
+            profilePic,
+            bio,
+            location,
+          } = savedUser;
+          return res.json({
+            token,
+            user: {
+              _id,
+              name,
+              email,
+              followers,
+              following,
+              profilePic,
+              bio,
+              location,
+            },
+          });
+        } else {
+          return res.json({ error: "Invalid email or password" });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+});
+
 router.post("/sendOtp", (req, res) => {
   console.log("sendOtp");
   const email = req.body.email;
@@ -101,57 +148,6 @@ router.post("/resetpassword", async (req, res) => {
     .catch((err) => {
       return res.status(422).json({ error: "Invalid OTP" });
     });
-});
-
-router.post("/signin", (req, res) => {
-  const { email, password } = req.body;
-  if (!email || !password) {
-    return res.status(422).json({ error: "Provide all required feilds" });
-  }
-  User.findOne({ email }).then((savedUser) => {
-    if (!savedUser) {
-      return res.json({ error: "Invalid email or Password" });
-    }
-    bcrypt
-      .compare(password, savedUser.password)
-      .then((isMatch) => {
-        if (isMatch) {
-          const token = jwt.sign({ id: savedUser._id }, process.env.JWT_SECRET);
-          const {
-            name,
-            _id,
-            email,
-            followers,
-            following,
-            profilePic,
-            bio,
-            location,
-          } = savedUser;
-          return res.json({
-            token,
-            user: {
-              _id,
-              name,
-              email,
-              followers,
-              following,
-              profilePic,
-              bio,
-              location,
-            },
-          });
-        } else {
-          return res.json({ error: "Invalid email or password" });
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  });
-});
-
-router.get("/protected", checkLogin, (req, res) => {
-  res.status(200).json("hello,this is proteced");
 });
 
 const mailSender = (email, otp) => {

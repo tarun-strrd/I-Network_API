@@ -7,7 +7,7 @@ const Comment = mongoose.model("Comment");
 const User = mongoose.model("User");
 
 router.get("/suggestedNetworks", checkLogin, (req, res) => {
-  console.log("suggestedNetworks");
+  //console.log("suggestedNetworks");
   User.find()
     .sort("-createdAt")
     .select("name profilePic")

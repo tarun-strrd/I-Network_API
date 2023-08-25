@@ -14,7 +14,7 @@ const Mailgen = require("mailgen");
 router.post("/signup", (req, res) => {
   const { name, email, password } = req.body;
 
-  console.log("signup inside");
+  //console.log("signup inside");
   //console.log(req.body);
   if (!email || !password || !name) {
     return res.status(422).json({ error: "Please add all required feilds" });
@@ -94,7 +94,7 @@ router.post("/signin", (req, res) => {
 });
 
 router.post("/sendOtp", (req, res) => {
-  console.log("sendOtp");
+  //console.log("sendOtp");
   const email = req.body.email;
   User.findOne({ email })
     .then((user) => {

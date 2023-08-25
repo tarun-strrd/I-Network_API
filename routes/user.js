@@ -13,7 +13,7 @@ router.get("/suggestedNetworks", checkLogin, (req, res) => {
     .select("name profilePic")
     .limit(10)
     .then((users) => {
-      console.log(users);
+      //console.log(users);
       res.status(200).json({ users });
     })
     .catch((err) => console.log(err));
@@ -104,7 +104,7 @@ router.put("/updateProfilePic", checkLogin, (req, res) => {
     { new: true }
   )
     .then((updatedUser) => {
-      console.log(updatedUser);
+      //console.log(updatedUser);
       res.status(200).json({ updatedUser });
     })
     .catch((err) => console.log(err));

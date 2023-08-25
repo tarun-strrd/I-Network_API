@@ -7,7 +7,7 @@ const Tweet = mongoose.model("Tweet");
 const Comment = mongoose.model("Comment");
 
 router.get("/allTweets", checkLogin, (req, res) => {
-  console.log("allTweets");
+  //console.log("allTweets");
   Tweet.find()
     .populate("postedBy", "_id name profilePic")
     .sort("-createdAt")
@@ -124,7 +124,7 @@ router.put("/unlike", checkLogin, (req, res) => {
 });
 
 router.post("/comment", checkLogin, (req, res) => {
-  console.log("comment");
+  //console.log("comment");
   const comment = new Comment({
     comment: req.body.comment,
     postedOn: req.body.tweetId,
@@ -133,7 +133,7 @@ router.post("/comment", checkLogin, (req, res) => {
   comment
     .save()
     .then((savedComment) => {
-      console.log(savedComment);
+      //console.log(savedComment);
       Tweet.findByIdAndUpdate(
         req.body.tweetId,
         {
